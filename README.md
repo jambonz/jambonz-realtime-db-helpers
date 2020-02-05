@@ -26,7 +26,7 @@ const {updateCallStatus} = require('jambonz-realtimedb-helpers')(opts, logger);
 Adds or updates the information about a call.  The callInfo object must contain (at least) the following properties:
 
 | property        | description |
-| ------------- |-------------| -----|
+| ------------- |-------------|
 | callSid | the Call Sid for this call|
 | callId | the SIP Call-ID |
 | sipStatus | the most recent sip status - a value of 100 means this is a new call that should be added|
