@@ -14,7 +14,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 test('calls tests', async(t) => {
   const fn = require('..');
-  const {updateCallStatus, retrieveCallInfo, listCallInfo, client} = fn(opts);
+  const {updateCallStatus, retrieveCall, deleteCall, listCalls, client} = fn(opts);
 
   //wait 1 sec for connection
   //await sleep(1); 
@@ -90,18 +90,24 @@ test('calls tests', async(t) => {
     }, 'http://127.0.0.1:3000');
     t.ok(status, 'successfully adds second new call');
 
-    let callInfo = await retrieveCallInfo('account-1', 'callSid-1');
+    let callInfo = await retrieveCall('account-1', 'callSid-1');
     t.ok(callInfo.callId === 'xxxx', 'successfully retrieves call');
 
-    callInfo = await retrieveCallInfo('account-1', 'callSid-2');
+    callInfo = await retrieveCall('account-1', 'callSid-2');
     t.ok(callInfo.callId === 'xxxx', 'successfully retrieves second call');
 
-    callInfo = await retrieveCallInfo('account-1', 'callSid-3');
+    callInfo = await retrieveCall('account-1', 'callSid-3');
     t.ok(!callInfo, 'fails to retrieve unknown call');
 
-    let calls = await listCallInfo('account-1');
+    let calls = await listCalls('account-1');
     t.ok(calls.length === 2, 'successfully listed both calls by account sid');
 
+    let result = await deleteCall('account-1', 'callSid-2');
+    t.ok(result === true, 'successfully deleted callSid-2');
+  
+    result = await deleteCall('account-1', 'callSid-2');
+    t.ok(result === false, 'failed to delete non-existent call sid');
+  
     await client.flushallAsync();
 
     for( let i = 0; i < 1000; i++) {
@@ -115,7 +121,7 @@ test('calls tests', async(t) => {
     }
     t.pass('successfully added 1000 calls');
 
-    calls = await listCallInfo('account-1');
+    calls = await listCalls('account-1');
     t.ok(calls.length === 1000, 'successfully retrieved all 1000 calls');
 
     await client.flushallAsync();
