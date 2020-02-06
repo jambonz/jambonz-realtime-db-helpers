@@ -18,7 +18,7 @@ const {updateCallStatus} = require('jambonz-realtimedb-helpers')(opts, logger);
 
 - [updateCallStatus](#updateCallStatus) - adds or updates the call status for a given call identified by call Sid.
 - [retrieveCallInfo](#retrieveCallInfo) - retrieves the call data for a call.
-- [listCallInfo](#listsCallInfo) - retrieves all the calls for a given account
+- [listCallInfo](#listCallInfo) - retrieves all the calls for a given account
 
 #### updateCallStatus
 `updateCallStatus(callInfo, serviceUrl)`
