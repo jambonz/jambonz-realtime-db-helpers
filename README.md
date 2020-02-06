@@ -58,5 +58,4 @@ Retrieves all of the active (or recently-active) calls for an Account.
 
 ```
 const calls = await listCallInfo(accountSid);
-}
 ```
