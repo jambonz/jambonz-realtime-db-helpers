@@ -18,5 +18,6 @@ module.exports = function(opts, logger) {
     client,
     updateCallStatus: require('./lib/update-call-status').bind(null, client, logger),
     retrieveCallInfo: require('./lib/retrieve-call-info').bind(null, client, logger),
+    listCallInfo: require('./lib/list-call-info').bind(null, client, logger)
   };
 };
