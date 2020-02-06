@@ -107,7 +107,7 @@ test('calls tests', async(t) => {
   
     result = await deleteCall('account-1', 'callSid-2');
     t.ok(result === false, 'failed to delete non-existent call sid');
-  
+  /*
     await client.flushallAsync();
 
     for( let i = 0; i < 1000; i++) {
@@ -125,7 +125,7 @@ test('calls tests', async(t) => {
     t.ok(calls.length === 1000, 'successfully retrieved all 1000 calls');
 
     await client.flushallAsync();
-
+*/
     t.end();
 
   }
