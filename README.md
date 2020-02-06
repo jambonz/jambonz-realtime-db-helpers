@@ -18,6 +18,7 @@ const {updateCallStatus} = require('jambonz-realtimedb-helpers')(opts, logger);
 
 - [updateCallStatus](#updateCallStatus) - adds or updates the call status for a given call identified by call Sid.
 - [retrieveCallInfo](#retrieveCallInfo) - retrieves the call data for a call.
+- [listCallInfo](#listsCallInfo) - retrieves all the calls for a given account
 
 #### updateCallStatus
 `updateCallStatus(callInfo, serviceUrl)`
@@ -37,13 +38,25 @@ Additionally, the `serviceUrl` parameter is required if the sipStatus is 100 (i.
 When a call reaches a final state ('completed', 'failed', 'busy', or 'no-answer') the associated call data will be purged one hours later.  This database is intended only to be used for live call information.
 
 #### retrieveCallInfo
-`retrieveCallInfo(callSid)`
+`retrieveCallInfo(accountSid, callSid)`
 <p style="margin: -5px 0px 10px 25px;font-size: smaller">returns a Promise yielding the call information as an object.</p>
 
 Retrieves the call information associated with a given call sid, if available.
 
 ```
-const callInfo = await retrieveCallInfo(callSid);
+const callInfo = await retrieveCallInfo(accountSid, callSid);
 if (!callInfo) {
   logger.info(`call for ${callSid} not found);
 }
+```
+
+#### listCallInfo
+`listCallInfo(accountSid)`
+<p style="margin: -5px 0px 10px 25px;font-size: smaller">returns a Promise yielding an array of information about calls.</p>
+
+Retrieves all of the active (or recently-active) calls for an Account.
+
+```
+const calls = await listCallInfo(accountSid);
+}
+``
