@@ -84,6 +84,7 @@ test('calls tests', async(t) => {
     status = await updateCallStatus({
       callSid: 'callSid-2',
       accountSid: 'account-1',
+      applicationSid: null,
       callId: 'xxxx',
       sipStatus: 100,
       callStatus: 'trying'
