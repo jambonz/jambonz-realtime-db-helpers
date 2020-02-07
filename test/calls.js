@@ -91,29 +91,48 @@ test('calls tests', async(t) => {
     }, 'http://127.0.0.1:3000');
     t.ok(status, 'successfully adds second new call');
 
+    status = await updateCallStatus({
+      callSid: 'callSid-3',
+      accountSid: 'account-1',
+      applicationSid: null,
+      callId: 'xxxx',
+      sipStatus: 100,
+      callStatus: 'trying'
+    }, 'http://127.0.0.1:3000');
+    t.ok(status, 'successfully adds third new call');
+
     let callInfo = await retrieveCall('account-1', 'callSid-1');
     t.ok(callInfo.callId === 'xxxx', 'successfully retrieves call');
 
     callInfo = await retrieveCall('account-1', 'callSid-2');
     t.ok(callInfo.callId === 'xxxx', 'successfully retrieves second call');
 
-    callInfo = await retrieveCall('account-1', 'callSid-3');
+    callInfo = await retrieveCall('account-1', 'callSid-X');
     t.ok(!callInfo, 'fails to retrieve unknown call');
 
     let calls = await listCalls('account-1');
-    t.ok(calls.length === 2, 'successfully listed both calls by account sid');
+    t.ok(calls.length === 3, 'successfully listed all calls');
 
-    purgeCalls();
-  
     let result = await deleteCall('account-1', 'callSid-2');
     t.ok(result === true, 'successfully deleted callSid-2');
   
     result = await deleteCall('account-1', 'callSid-2');
     t.ok(result === false, 'failed to delete non-existent call sid');
 
+    let count = await purgeCalls();
+    t.ok(count === 0, 'no calls purged');
+
+    // force age out by removing key
+    count = await client.delAsync(`call:account-1:callSid-3`);
+    t.ok(count === 1, 'forced call 3 to age out');
+
+    count = await purgeCalls();
+    t.ok(count === 1, '1 call purged');
+
+
     await client.flushallAsync();
 
-    for( let i = 0; i < 1000; i++) {
+    for( let i = 0; i < 10000; i++) {
       await updateCallStatus({
         callSid: `callSid-${i}`,
         accountSid: 'account-1',
@@ -122,12 +141,13 @@ test('calls tests', async(t) => {
         callStatus: 'trying'
       }, 'http://127.0.0.1:3000');
     }
-    t.pass('successfully added 1000 calls');
+    t.pass('successfully added 10,000 calls');
 
-    purgeCalls();
+    count = await purgeCalls();
+    t.ok(count === 0, 'no calls purged');
 
     calls = await listCalls('account-1');
-    t.ok(calls.length === 1000, 'successfully retrieved all 1000 calls');
+    t.ok(calls.length === 10000, 'successfully retrieved all 10,000 calls');
 
     await client.flushallAsync();
 
