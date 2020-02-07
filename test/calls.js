@@ -14,7 +14,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 test('calls tests', async(t) => {
   const fn = require('..');
-  const {updateCallStatus, retrieveCall, deleteCall, listCalls, client} = fn(opts);
+  const {updateCallStatus, retrieveCall, deleteCall, listCalls, purgeCalls, client} = fn(opts);
 
   //wait 1 sec for connection
   //await sleep(1); 
@@ -103,12 +103,14 @@ test('calls tests', async(t) => {
     let calls = await listCalls('account-1');
     t.ok(calls.length === 2, 'successfully listed both calls by account sid');
 
+    purgeCalls();
+  
     let result = await deleteCall('account-1', 'callSid-2');
     t.ok(result === true, 'successfully deleted callSid-2');
   
     result = await deleteCall('account-1', 'callSid-2');
     t.ok(result === false, 'failed to delete non-existent call sid');
-  /*
+
     await client.flushallAsync();
 
     for( let i = 0; i < 1000; i++) {
@@ -122,11 +124,13 @@ test('calls tests', async(t) => {
     }
     t.pass('successfully added 1000 calls');
 
+    purgeCalls();
+
     calls = await listCalls('account-1');
     t.ok(calls.length === 1000, 'successfully retrieved all 1000 calls');
 
     await client.flushallAsync();
-*/
+
     t.end();
 
   }
