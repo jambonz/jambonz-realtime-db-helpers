@@ -19,6 +19,9 @@ const {updateCallStatus} = require('jambonz-realtimedb-helpers')(opts, logger);
 - [updateCallStatus](#updateCallStatus) - adds or updates the call status for a given call identified by call Sid.
 - [retrieveCallInfo](#retrieveCallInfo) - retrieves the call data for a call.
 - [listCallInfo](#listCallInfo) - retrieves all the calls for a given account
+- [deleteCall](#deleteCall) - removes call data for a call.
+- [purgeCalls](#purgeCalls) - removes call data for all calls that completed some time ago.
+- [synthAudio](#synthAudio) - retrieves generated tts audio from cache, or generates it
 
 #### updateCallStatus
 `updateCallStatus(callInfo, serviceUrl)`
@@ -58,4 +61,39 @@ Retrieves all of the active (or recently-active) calls for an Account.
 
 ```
 const calls = await listCallInfo(accountSid);
+```
+
+#### deleteCall
+`deleteCall(accountSid, callSid)`
+<p style="margin: -5px 0px 10px 25px;font-size: smaller">returns boolean indicating if call was successfully deleted</p>
+
+Deletes a Call.
+
+```
+const result = await deleteCall(accountSid, callSid);
+```
+
+#### purgeCalls
+`purgeCalls()`
+<p style="margin: -5px 0px 10px 25px;font-size: smaller">returns number of calls purged</p>
+
+Purges call data for calls that ended some time ago.
+
+```
+const countDeleted = await purgeCalls();
+```
+
+#### synthAudio
+`synthAudio({vendor, language, voice, text})`
+<p style="margin: -5px 0px 10px 25px;font-size: smaller">returns the path to a temporary file containing the generated audio</p>
+
+Generates audio for text, retrieving previously generated audio from cache if available.  Audio is cached for 24 hours.
+
+```
+const path = await synthAudio({
+  vendor: 'aws', 
+  language: 'en-US', 
+  voice: 'Amy', 
+  text: 'This is a test'
+});
 ```
