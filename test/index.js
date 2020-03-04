@@ -1,2 +1,2 @@
 require('./calls');
-//require('./synth');
+require('./synth');

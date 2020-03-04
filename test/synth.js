@@ -10,6 +10,15 @@ test('speech synth tests', async(t) => {
   const fn = require('..');
   const {synthAudio, client} = fn(opts);
 
+  if (!process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+    !process.env.AWS_ACCESS_KEY_ID ||
+    !process.env.AWS_SECRET_ACCESS_KEY ||
+    !process.env.AWS_REGION) {
+      t.pass('skipping speech synth tests since no credentials provided');
+      t.end();
+      client.quit();
+      return;
+  }
   try {
     let filepath = await synthAudio({
       vendor: 'google',
