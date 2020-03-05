@@ -1,6 +1,7 @@
 const {noopLogger} = require('./lib/utils');
 const bluebird = require('bluebird');
 const redis = require('redis');
+const StatsCollector = require('jambonz-stats-collector');
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
@@ -14,6 +15,8 @@ module.exports = function(opts, logger) {
       });
     });
 
+  const stats = new StatsCollector(logger);
+
   return {
     client,
     updateCallStatus: require('./lib/update-call-status').bind(null, client, logger),
@@ -21,6 +24,6 @@ module.exports = function(opts, logger) {
     deleteCall: require('./lib/delete-call').bind(null, client, logger),
     listCalls: require('./lib/list-calls').bind(null, client, logger),
     purgeCalls: require('./lib/purge-calls').bind(null, client, logger),
-    synthAudio: require('./lib/synth-audio').bind(null, client, logger)
+    synthAudio: require('./lib/synth-audio').bind(null, client, logger, stats)
   };
 };
