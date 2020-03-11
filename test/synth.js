@@ -22,16 +22,16 @@ test('speech synth tests', async(t) => {
   try {
     let filepath = await synthAudio({
       vendor: 'google',
-      language: 'en-US',
-      voice: 'en-US-Wavenet-C', 
+      language: 'en-GB',
+      gender: 'MALE', 
       text: 'This is a test.  This is only a test'
     });
     t.pass(`successfully synthesized non-cached google audio to ${filepath}`);
   
     filepath = await synthAudio({
       vendor: 'google',
-      language: 'en-US',
-      voice: 'en-US-Wavenet-C', 
+      language: 'en-GB',
+      gender: 'MALE', 
       text: 'This is a test.  This is only a test'
     });
     t.pass(`successfully synthesized cached google audio to ${filepath}`);
