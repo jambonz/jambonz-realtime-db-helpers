@@ -26,6 +26,8 @@ module.exports = function(opts, logger) {
     purgeCalls: require('./lib/purge-calls').bind(null, client, logger),
     synthAudio: require('./lib/synth-audio').bind(null, client, logger, stats),
     createSet: require('./lib/create-set').bind(null, client, logger),
-    retrieveSet: require('./lib/retrieve-set').bind(null, client, logger)
+    retrieveSet: require('./lib/retrieve-set').bind(null, client, logger),
+    createHash: require('./lib/create-hash').bind(null, client, logger),
+    retrieveHash: require('./lib/retrieve-hash').bind(null, client, logger)
   };
 };

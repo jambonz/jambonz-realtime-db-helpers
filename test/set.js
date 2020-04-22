@@ -2,12 +2,6 @@ const test = require('tape').test ;
 const config = require('config');
 const opts = config.get('redis');
 
-function sleep(secs) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, secs * 1000);
-  });
-}
-
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at: Promise', p, 'reason:', reason);
 });
@@ -15,9 +9,6 @@ process.on('unhandledRejection', (reason, p) => {
 test('set tests', async(t) => {
   const fn = require('..');
   const {createSet, retrieveSet, client} = fn(opts);
-
-  //wait 1 sec for connection
-  //await sleep(1); 
 
   try {
     const set1 = new Set();
