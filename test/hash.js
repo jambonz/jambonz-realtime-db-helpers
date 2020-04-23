@@ -14,7 +14,7 @@ function sleep(secs) {
 
 test('hash tests', async(t) => {
   const fn = require('..');
-  const {createHash, retrieveHash, client} = fn(opts);
+  const {createHash, retrieveHash, deleteKey, client} = fn(opts);
 
   try {
     let result = await createHash('akey', {
@@ -48,6 +48,11 @@ test('hash tests', async(t) => {
     });
     t.ok(result === true, 'able to set key with number values');
 
+    result = await deleteKey('bkey');
+    t.ok(result === true, 'key successfully deleted');
+
+    result = await deleteKey('ckey');
+    t.ok(result === false, 'delete of unknown key failed');
 
     await client.flushallAsync();
 
