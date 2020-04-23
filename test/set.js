@@ -8,7 +8,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 test('set tests', async(t) => {
   const fn = require('..');
-  const {createSet, retrieveSet, client} = fn(opts);
+  const {createSet, retrieveSet, addToSet, client} = fn(opts);
 
   try {
     const set1 = new Set();
@@ -24,9 +24,23 @@ test('set tests', async(t) => {
     added = await createSet('sbcList-1', set2);
     t.ok(1 === added, 'recreates set with new members');
 
-    const ret = await retrieveSet('sbcList-1');
+    let ret = await retrieveSet('sbcList-1');
     t.ok(Array.isArray(ret) && ret.length === 1 && ret[0] === '10.10.10.4', 'retrieves set members');
 
+    let count = await addToSet('sbcList-1', '10.10.10.5');
+    t.ok(count === 1, 'addToSet adds a string as member');
+
+    count = await addToSet('sbcList-1', ['10.10.10.6', '10.10.10.7']);
+    t.ok(count === 2, 'addToSet adds an array as member');
+
+    const set3 = new Set();
+    set3.add('10.10.10.8');
+    set3.add('10.10.10.9');
+    set3.add('10.10.10.10');
+    count = await addToSet('sbcList-1', set3);
+    t.ok(count === 3, 'addToSet adds a set as member');
+
+    ret = await retrieveSet('sbcList-1');
     t.end();
 
   }
