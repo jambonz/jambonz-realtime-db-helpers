@@ -8,7 +8,7 @@ process.on('unhandledRejection', (reason, p) => {
 
 test('set tests', async(t) => {
   const fn = require('..');
-  const {createSet, retrieveSet, addToSet, client} = fn(opts);
+  const {createSet, retrieveSet, addToSet, removeFromSet, client} = fn(opts);
 
   try {
     const set1 = new Set();
@@ -39,6 +39,15 @@ test('set tests', async(t) => {
     set3.add('10.10.10.10');
     count = await addToSet('sbcList-1', set3);
     t.ok(count === 3, 'addToSet adds a set as member');
+
+    count = await removeFromSet('sbcList-1', '10.10.10.5');
+    t.ok(count === 1, 'removeFromSet single member');
+
+    count = await removeFromSet('sbcList-1', ['10.10.10.6', '10.10.10.7']);
+    t.ok(count === 2, 'removeFromSet array of members');
+
+    count = await removeFromSet('sbcList-1', set3);
+    t.ok(count === 3, 'removeFromSet set of members');
 
     ret = await retrieveSet('sbcList-1');
     t.end();
