@@ -8,11 +8,13 @@ process.on('unhandledRejection', (reason, p) => {
 
 test('key tests', async(t) => {
   const fn = require('..');
-  const {addKey, deleteKey, client} = fn(opts);
+  const {addKey, deleteKey, retrieveKey, client} = fn(opts);
 
   try {
     let result = await addKey('akey', 'value');
     t.ok(result === 'OK', 'sucessfully set a key with no expires');
+    result = await retrieveKey('akey');
+    t.ok(result === 'value', 'sucessfully retrieved key');
     result = await addKey('bkey', 'another value', 3);
     t.ok(result === 'OK', 'sucessfully set a key with expires');
 
