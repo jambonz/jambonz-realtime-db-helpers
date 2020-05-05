@@ -24,7 +24,8 @@ test('speech synth tests', async(t) => {
       vendor: 'google',
       language: 'en-GB',
       gender: 'MALE', 
-      text: 'This is a test.  This is only a test'
+      text: 'This is a test.  This is only a test',
+      salt: 'foo.bar'
     });
     t.pass(`successfully synthesized non-cached google audio to ${filepath}`);
   
